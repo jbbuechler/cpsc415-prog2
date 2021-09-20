@@ -39,6 +39,8 @@ def find_best_path(atlas):
     frontier = [node_start]
     explored = []
     goal_state = atlas.get_num_cities() - 1
+    cost_final = 0
+    node_goal = None
 
     # while frontier is not empty
     while frontier.__len__() != 0:
@@ -51,6 +53,8 @@ def find_best_path(atlas):
 
         # if goal state, end search
         if lowest_cost_node.get_node_num() == goal_state:
+            cost_final = lowest_cost_node.get_total_cost()
+            node_goal = lowest_cost_node
             break
 
         # this node will be explored, remove from queue and add to explored + optimal path
@@ -92,14 +96,13 @@ def find_best_path(atlas):
                                 frontier.append(child_node)
 
     # return optimal path tuple
-    node = frontier[frontier.__len__() - 1]
+    node = node_goal
     optimal_path = [node.get_node_num()]
     while node.get_parent() is not None:
         optimal_path.insert(0, node.get_parent().get_node_num())
         node = node.get_parent()
 
-    lowest_cost = frontier[frontier.__len__() - 1].get_total_cost()
-    return_tuple = (optimal_path, lowest_cost)
+    return_tuple = (optimal_path, cost_final)
     return return_tuple
 
 if __name__ == '__main__':
